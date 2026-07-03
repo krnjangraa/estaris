@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import TYPE_CHECKING, List
+from typing import List, TYPE_CHECKING
 
 from sqlalchemy import Column, Enum as SQLEnum, String
 from sqlmodel import Field, Relationship
@@ -56,5 +56,5 @@ class Admin(TimestampedUUIDModel, table=True):
     )
 
     buildings: List["Building"] = Relationship(
-        back_populates="admin"
+        back_populates="admin",
     )

@@ -111,3 +111,49 @@ class RoomRepository:
             )
 
         return rooms
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ):
+        statement = (
+            select(
+                Room,
+                Building.name.label("building_name"),
+                func.count(Tenant.id).label("occupied"),
+            )
+            .join(Building, Building.id == Room.building_id)
+            .outerjoin(
+                Tenant,
+                and_(
+                    Tenant.room_id == Room.id,
+                    Tenant.status == TenantStatus.ACTIVE,
+                ),
+            )
+            .where(Building.admin_id == admin_id)
+            .group_by(Room.id, Building.name)
+            .order_by(Building.name, Room.room_number)
+        )
+
+        result = session.exec(statement).all()
+
+        rooms = []
+        for room, building_name, occupied in result:
+            rooms.append(
+                {
+                    "id": room.id,
+                    "building_id": room.building_id,
+                    "building_name": building_name,
+                    "room_number": room.room_number,
+                    "room_type": room.room_type,
+                    "capacity": room.capacity,
+                    "base_rent": float(room.base_rent),
+                    "occupied": occupied,
+                    "available": room.capacity - occupied,
+                    "created_at": room.created_at,
+                    "updated_at": room.updated_at,
+                }
+            )
+
+        return rooms

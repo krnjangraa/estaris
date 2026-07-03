@@ -40,6 +40,16 @@ export async function updateTenant(
   return response.data;
 }
 
+export async function getTenant(
+  tenantId: string
+) {
+  const response = await api.get<Tenant>(
+    `/tenants/${tenantId}`
+  );
+
+  return response.data;
+}
+
 export async function deleteTenant(
   tenantId: string
 ) {

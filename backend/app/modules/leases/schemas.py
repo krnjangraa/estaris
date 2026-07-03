@@ -62,3 +62,9 @@ class LeaseRead(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
     )
+
+
+class GlobalLeaseRead(LeaseRead):
+    tenant_name: str
+    room_number: str
+    building_name: str

@@ -1,7 +1,8 @@
+from uuid import UUID
 from fastapi import HTTPException, status
 from sqlmodel import Session
 
-from app.modules.leases.models import Lease
+from app.modules.leases.models import Lease, LeaseStatus
 from app.modules.leases.repositories import LeaseRepository
 from app.modules.leases.schemas import (
     LeaseCreate,
@@ -74,6 +75,16 @@ class LeaseService:
         lease: Lease,
         data: LeaseUpdate,
     ):
+        if data.status == LeaseStatus.ACTIVE and lease.status != LeaseStatus.ACTIVE:
+            active = LeaseRepository.active_lease(
+                session,
+                lease.tenant_id,
+            )
+            if active is not None and active.id != lease.id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Tenant already has an active lease",
+                )
 
         update_data = data.model_dump(exclude_unset=True)
 
@@ -90,8 +101,23 @@ class LeaseService:
         session: Session,
         lease: Lease,
     ):
+        if lease.status == LeaseStatus.ACTIVE:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Please terminate the lease first.",
+            )
 
         LeaseRepository.delete(
             session,
             lease,
+        )
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ) -> list[dict]:
+        return LeaseRepository.get_all_global(
+            session=session,
+            admin_id=admin_id,
         )

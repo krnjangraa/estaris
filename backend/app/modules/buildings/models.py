@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.modules.auth.models import Admin
     from app.modules.rooms.models import Room
 
+
 class Building(TimestampedUUIDModel, table=True):
     __tablename__ = "buildings"
 
@@ -42,7 +43,7 @@ class Building(TimestampedUUIDModel, table=True):
     )
 
     admin: "Admin" = Relationship(
-        back_populates="buildings"
+        back_populates="buildings",
     )
     rooms: List["Room"] = Relationship(
         back_populates="building",

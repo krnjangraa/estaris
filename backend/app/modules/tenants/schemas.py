@@ -103,3 +103,8 @@ class TenantRead(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
     )
+
+
+class GlobalTenantRead(TenantRead):
+    room_number: str
+    building_name: str

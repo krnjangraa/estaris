@@ -9,6 +9,7 @@ import {
   deleteRoom,
   getRooms,
   updateRoom,
+  getGlobalRooms,
 } from "./api";
 
 export function useRooms(buildingId: string) {

@@ -7,6 +7,7 @@ import {
 import {
   createTenant,
   deleteTenant,
+  getTenant,
   getTenants,
   updateTenant,
 } from "./api";
@@ -16,6 +17,14 @@ export function useTenants(roomId: string) {
     queryKey: ["tenants", roomId],
     queryFn: () => getTenants(roomId),
     enabled: !!roomId,
+  });
+}
+
+export function useTenant(tenantId: string) {
+  return useQuery({
+    queryKey: ["tenant", tenantId],
+    queryFn: () => getTenant(tenantId),
+    enabled: !!tenantId,
   });
 }
 

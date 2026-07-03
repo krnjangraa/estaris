@@ -40,8 +40,11 @@ export default function BuildingTable({
         setDeleting(undefined);
       },
 
-      onError() {
-        toast.error("Failed to delete building");
+      onError(error: any) {
+        toast.error(
+          error.response?.data?.detail ??
+            "Failed to delete building"
+        );
       },
     });
   }
@@ -96,6 +99,7 @@ export default function BuildingTable({
                 <Button
                   size="icon"
                   variant="outline"
+                  title="Edit Building"
                   onClick={() =>
                     setEditing(building)
                   }
@@ -103,17 +107,19 @@ export default function BuildingTable({
                   <Pencil size={16} />
                 </Button>
                 <Button
-                size="icon"
-                variant="secondary"
-                onClick={() =>
+                  size="icon"
+                  variant="secondary"
+                  title="View Rooms"
+                  onClick={() =>
                     navigate(`/buildings/${building.id}/rooms`)
-                }
+                  }
                 >
-                <DoorOpen size={16} />
+                  <DoorOpen size={16} />
                 </Button>
                 <Button
                   size="icon"
                   variant="destructive"
+                  title="Delete Building"
                   onClick={() =>
                     setDeleting(building)
                   }

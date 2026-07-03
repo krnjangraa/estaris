@@ -8,6 +8,11 @@ import LoginPage from "@/pages/LoginPage";
 import RoomsPage from "@/pages/RoomsPage";
 import ProtectedRoute from "./ProtectedRoute";
 import TenantsPage from "@/pages/TenantsPage";
+import LeasesPage from "@/pages/LeasesPage";
+import PaymentsPage from "@/pages/PaymentsPage";
+import GlobalPaymentsPage from "@/pages/GlobalPaymentsPage";
+import ReportsPage from "@/pages/ReportsPage";
+
 export const router = createBrowserRouter([
   {
     path: "/login",
@@ -38,6 +43,22 @@ export const router = createBrowserRouter([
     {
       path: "rooms/:roomId/tenants",
       element: <TenantsPage />,
+    },
+    {
+      path: "tenants/:tenantId/leases",
+      element: <LeasesPage />,
+    },
+    {
+      path: "leases/:leaseId/payments",
+      element: <PaymentsPage />,
+    },
+    {
+      path: "payments",
+      element: <GlobalPaymentsPage />,
+    },
+    {
+      path: "reports",
+      element: <ReportsPage />,
     },
   ],
   },

@@ -8,6 +8,7 @@ from app.modules.rooms.schemas import (
     RoomCreate,
     RoomRead,
     RoomUpdate,
+    GlobalRoomRead,
 )
 from app.modules.rooms.services import RoomService
 
@@ -150,4 +151,18 @@ def delete_room(
     RoomService.delete(
         session=session,
         room=room,
+    )
+
+
+@router.get(
+    "/rooms",
+    response_model=list[GlobalRoomRead],
+)
+def get_global_rooms(
+    session: SessionDep,
+    admin: CurrentAdmin,
+):
+    return RoomService.get_all_global(
+        session=session,
+        admin_id=admin.id,
     )

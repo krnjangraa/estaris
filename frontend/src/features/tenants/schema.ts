@@ -29,7 +29,9 @@ export const tenantSchema = z.object({
     .string()
     .min(2, "ID proof number is required"),
 
-  move_in_date: z.string(),
+  move_in_date: z
+    .string()
+    .min(1, "Move in date is required"),
 });
 
 export type TenantSchema = z.infer<

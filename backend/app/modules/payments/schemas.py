@@ -13,7 +13,7 @@ class PaymentCreate(BaseModel):
     billing_month: int = Field(ge=1, le=12)
     billing_year: int = Field(ge=2024)
 
-    amount_due: float = Field(gt=0)
+    amount_due: float | None = Field(default=None, gt=0)
     amount_paid: float = Field(ge=0)
 
     payment_date: date
@@ -22,6 +22,7 @@ class PaymentCreate(BaseModel):
 
     status: PaymentStatus
 
+    transaction_reference: str | None = None
     remarks: str | None = None
 
 
@@ -36,6 +37,7 @@ class PaymentUpdate(BaseModel):
 
     status: PaymentStatus | None = None
 
+    transaction_reference: str | None = None
     remarks: str | None = None
 
 
@@ -56,6 +58,11 @@ class PaymentRead(BaseModel):
 
     status: PaymentStatus
 
+    transaction_reference: str | None
+    receipt_number: str
+    tenant_name: str
+    room_number: str
+    building_name: str
     remarks: str | None
 
     created_at: datetime

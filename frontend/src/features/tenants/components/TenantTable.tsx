@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,8 @@ export default function TenantTable({
   roomId,
   tenants,
 }: Props) {
+  const navigate = useNavigate();
+
   const [editing, setEditing] =
     useState<Tenant>();
 
@@ -143,6 +146,7 @@ export default function TenantTable({
                 <Button
                   size="icon"
                   variant="outline"
+                  title="Edit Tenant"
                   onClick={() =>
                     setEditing(tenant)
                   }
@@ -152,7 +156,19 @@ export default function TenantTable({
 
                 <Button
                   size="icon"
+                  variant="outline"
+                  onClick={() =>
+                    navigate(`/tenants/${tenant.id}/leases`)
+                  }
+                  title="View Leases"
+                >
+                  <FileText size={16} />
+                </Button>
+
+                <Button
+                  size="icon"
                   variant="destructive"
+                  title="Delete Tenant"
                   onClick={() =>
                     setDeleting(tenant)
                   }

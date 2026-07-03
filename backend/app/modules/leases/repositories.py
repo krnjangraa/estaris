@@ -86,3 +86,34 @@ class LeaseRepository:
 
         session.delete(lease)
         session.commit()
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ):
+        statement = (
+            select(
+                Lease,
+                Tenant.name.label("tenant_name"),
+                Room.room_number,
+                Building.name.label("building_name"),
+            )
+            .join(Tenant, Tenant.id == Lease.tenant_id)
+            .join(Room, Room.id == Tenant.room_id)
+            .join(Building, Building.id == Room.building_id)
+            .where(Building.admin_id == admin_id)
+            .order_by(Lease.start_date.desc())
+        )
+
+        result = session.exec(statement).all()
+
+        leases = []
+        for lease, tenant_name, room_number, building_name in result:
+            l_dict = lease.model_dump()
+            l_dict["tenant_name"] = tenant_name
+            l_dict["room_number"] = room_number
+            l_dict["building_name"] = building_name
+            leases.append(l_dict)
+
+        return leases

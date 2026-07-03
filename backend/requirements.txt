@@ -13,5 +13,5 @@ weasyprint
 pytest 
 httpx 
 python-dotenv
-bcrypt
+bcrypt==4.0.1
 email-validator

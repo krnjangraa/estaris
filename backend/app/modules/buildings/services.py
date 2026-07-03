@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from fastapi import HTTPException, status
 from sqlmodel import Session
 
 from app.modules.buildings.models import Building
@@ -79,6 +80,12 @@ class BuildingService:
         session: Session,
         building: Building,
     ) -> None:
+        for room in building.rooms:
+            if room.tenants:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot delete building. Room '{room.room_number}' has assigned tenants.",
+                )
 
         BuildingRepository.delete(
             session,

@@ -7,6 +7,7 @@ from app.modules.leases.schemas import (
     LeaseCreate,
     LeaseRead,
     LeaseUpdate,
+    GlobalLeaseRead,
 )
 from app.modules.leases.services import LeaseService
 from app.modules.tenants.services import TenantService
@@ -153,3 +154,17 @@ def delete_lease(
     )
 
     return None
+
+
+@router.get(
+    "/leases",
+    response_model=list[GlobalLeaseRead],
+)
+def get_global_leases(
+    session: SessionDep,
+    admin: CurrentAdmin,
+):
+    return LeaseService.get_all_global(
+        session=session,
+        admin_id=admin.id,
+    )

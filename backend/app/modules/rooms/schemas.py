@@ -67,3 +67,7 @@ class RoomRead(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
     )
+
+
+class GlobalRoomRead(RoomRead):
+    building_name: str

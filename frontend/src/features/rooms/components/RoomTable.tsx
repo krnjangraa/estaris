@@ -143,6 +143,7 @@ export default function RoomTable({
                 <Button
                   size="icon"
                   variant="outline"
+                  title="Edit Room"
                   onClick={() =>
                     setEditing(room)
                   }
@@ -153,6 +154,7 @@ export default function RoomTable({
                 <Button
                   size="icon"
                   variant="secondary"
+                  title="View Tenants"
                   onClick={() =>
                     navigate(
                       `/rooms/${room.id}/tenants`
@@ -165,6 +167,7 @@ export default function RoomTable({
                 <Button
                   size="icon"
                   variant="destructive"
+                  title="Delete Room"
                   onClick={() =>
                     setDeleting(room)
                   }

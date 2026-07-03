@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 from uuid import UUID
 
 from sqlalchemy import Column, ForeignKey, Integer, Numeric, String, UniqueConstraint
@@ -64,3 +64,11 @@ class Room(TimestampedUUIDModel, table=True):
     tenants: List["Tenant"] = Relationship(
         back_populates="room",
     )
+
+    @property
+    def occupied(self) -> int:
+        return sum(1 for t in self.tenants if t.status == "active")
+
+    @property
+    def available(self) -> int:
+        return self.capacity - self.occupied

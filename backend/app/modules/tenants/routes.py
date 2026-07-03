@@ -8,6 +8,7 @@ from app.modules.tenants.schemas import (
     TenantCreate,
     TenantRead,
     TenantUpdate,
+    GlobalTenantRead,
 )
 from app.modules.tenants.services import TenantService
 
@@ -153,3 +154,17 @@ def delete_tenant(
     )
 
     return None
+
+
+@router.get(
+    "/tenants",
+    response_model=list[GlobalTenantRead],
+)
+def get_global_tenants(
+    session: SessionDep,
+    admin: CurrentAdmin,
+):
+    return TenantService.get_all_global(
+        session=session,
+        admin_id=admin.id,
+    )

@@ -28,3 +28,7 @@ export interface RoomUpdate {
   capacity?: number;
   base_rent?: number;
 }
+
+export interface GlobalRoom extends Room {
+  building_name: string;
+}

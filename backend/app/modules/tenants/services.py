@@ -1,3 +1,4 @@
+from uuid import UUID
 from fastapi import HTTPException, status
 from sqlmodel import Session
 
@@ -94,7 +95,23 @@ class TenantService:
         tenant: Tenant,
     ) -> None:
 
+        if tenant.leases:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot delete tenant if lease exists.",
+            )
+
         TenantRepository.delete(
             session,
             tenant,
+        )
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ) -> list[dict]:
+        return TenantRepository.get_all_global(
+            session=session,
+            admin_id=admin_id,
         )

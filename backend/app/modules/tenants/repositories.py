@@ -85,3 +85,31 @@ class TenantRepository:
 
         session.delete(tenant)
         session.commit()
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ):
+        statement = (
+            select(
+                Tenant,
+                Room.room_number,
+                Building.name.label("building_name"),
+            )
+            .join(Room, Room.id == Tenant.room_id)
+            .join(Building, Building.id == Room.building_id)
+            .where(Building.admin_id == admin_id)
+            .order_by(Tenant.name)
+        )
+
+        result = session.exec(statement).all()
+
+        tenants = []
+        for tenant, room_number, building_name in result:
+            t_dict = tenant.model_dump()
+            t_dict["room_number"] = room_number
+            t_dict["building_name"] = building_name
+            tenants.append(t_dict)
+
+        return tenants

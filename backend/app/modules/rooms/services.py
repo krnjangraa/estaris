@@ -127,4 +127,14 @@ class RoomService:
                 session,
                 building,
             )
+
+    @staticmethod
+    def get_all_global(
+        session: Session,
+        admin_id: UUID,
+    ) -> list[dict]:
+        return RoomRepository.get_all_global(
+            session=session,
+            admin_id=admin_id,
+        )
     
