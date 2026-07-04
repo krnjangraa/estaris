@@ -1,6 +1,8 @@
-import { Pencil, Printer, Trash2 } from "lucide-react";
+import { CheckCircle2, MessageCircle, Pencil, Printer, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +41,18 @@ const MONTH_NAMES = [
   "November",
   "December",
 ];
+
+function buildWhatsAppRentLink(payment: Payment): string {
+  const digits = (payment as any).contact_number?.replace(/\D/g, "") ?? "";
+  const phone = digits.length === 10 ? `91${digits}` : digits;
+  const month = MONTH_NAMES[payment.billing_month];
+  const amount = Number(payment.amount_due ?? 0).toLocaleString("en-IN");
+
+  const message = encodeURIComponent(
+    `Dear ${payment.tenant_name},\n\nThis is a reminder that your rent of ₹${amount} for ${month} ${payment.billing_year} (Room ${payment.room_number}, ${payment.building_name}) is pending. Please arrange the payment at the earliest.\n\nThank you,\nEstaris Management`
+  );
+  return `https://wa.me/${phone}?text=${message}`;
+}
 
 export default function PaymentTable({
   leaseId,
@@ -88,6 +102,7 @@ export default function PaymentTable({
               </>
             )}
             <TableHead>Billing Month</TableHead>
+            <TableHead>Due Date</TableHead>
             <TableHead>Amount Due</TableHead>
             <TableHead>Amount Paid</TableHead>
             <TableHead>Payment Date</TableHead>
@@ -102,7 +117,7 @@ export default function PaymentTable({
           {payments.length === 0 ? (
             <TableRow>
               <TableCell
-                colSpan={showDetails ? 11 : 8}
+                colSpan={showDetails ? 12 : 9}
                 className="text-center py-10 text-slate-500"
               >
                 No payment records found.
@@ -114,22 +129,35 @@ export default function PaymentTable({
                 {showDetails && (
                   <>
                     <TableCell className="font-semibold text-slate-800">
-                      {payment.tenant_name}
+                      <Link to={`/tenants/${payment.tenant_id}`} className="text-primary hover:underline">
+                        {payment.tenant_name}
+                      </Link>
                     </TableCell>
-                    <TableCell>{payment.building_name}</TableCell>
-                    <TableCell className="font-mono text-xs text-slate-600">
-                      {payment.room_number}
+
+                    <TableCell>
+                      <Link to={`/buildings/${payment.building_id}/rooms`} className="text-primary hover:underline font-semibold">
+                        {payment.building_name}
+                      </Link>
                     </TableCell>
+                    <TableCell>
+                      <Link to={`/rooms/${payment.room_id}`} className="text-primary hover:underline font-semibold font-mono text-xs text-slate-600">
+                        {payment.room_number}
+                      </Link>
+                    </TableCell>
+
                   </>
                 )}
-                <TableCell className="font-medium">
+                 <TableCell className="font-medium">
                   {MONTH_NAMES[payment.billing_month]} {payment.billing_year}
+                </TableCell>
+                <TableCell>
+                  {payment.due_date ? new Date(payment.due_date).toLocaleDateString("en-IN") : "—"}
                 </TableCell>
                 <TableCell>₹{Number(payment.amount_due ?? 0).toLocaleString("en-IN")}</TableCell>
                 <TableCell>₹{Number(payment.amount_paid ?? 0).toLocaleString("en-IN")}</TableCell>
-                <TableCell>{payment.payment_date}</TableCell>
+                <TableCell>{payment.status === "paid" ? payment.payment_date : "—"}</TableCell>
                 <TableCell className="capitalize">
-                  {payment.payment_method.replace("_", " ")}
+                  {payment.status === "paid" ? payment.payment_method.replace("_", " ") : "—"}
                 </TableCell>
                 <TableCell>
                   <span
@@ -141,10 +169,41 @@ export default function PaymentTable({
                   </span>
                 </TableCell>
                 <TableCell className="font-mono text-xs">
-                  {payment.receipt_number}
+                  {payment.status === "paid" ? payment.receipt_number : "—"}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
+                    {(payment.status === "pending" || payment.status === "overdue") && (
+                      <>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                          title="Send WhatsApp Reminder"
+                          asChild
+                        >
+                          <a
+                            href={buildWhatsAppRentLink(payment)}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <MessageCircle size={16} />
+                          </a>
+                        </Button>
+
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                          title="Mark Paid"
+                          onClick={() => setEditing(payment)}
+                        >
+                          <CheckCircle2 size={16} />
+                        </Button>
+                      </>
+                    )}
+
+
                     <Button
                       size="icon"
                       variant="outline"

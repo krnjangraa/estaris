@@ -44,8 +44,11 @@ class PendingDueReportItem(BaseModel):
     payment_id: UUID
     lease_id: UUID
     tenant_id: UUID
+    room_id: UUID
+    building_id: UUID
     tenant_name: str
     tenant_phone: str
+
     emergency_contact: str
     emergency_phone: str
     building_name: str

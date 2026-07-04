@@ -96,9 +96,11 @@ class TenantRead(BaseModel):
     move_in_date: date
 
     status: TenantStatus
+    monthly_rent: float | None = None
 
     created_at: datetime
     updated_at: datetime
+
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -108,3 +110,4 @@ class TenantRead(BaseModel):
 class GlobalTenantRead(TenantRead):
     room_number: str
     building_name: str
+    building_id: UUID

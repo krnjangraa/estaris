@@ -10,6 +10,7 @@ import {
   getRooms,
   updateRoom,
   getGlobalRooms,
+  getRoom,
 } from "./api";
 
 export function useRooms(buildingId: string) {
@@ -19,6 +20,15 @@ export function useRooms(buildingId: string) {
     enabled: !!buildingId,
   });
 }
+
+export function useRoom(roomId: string) {
+  return useQuery({
+    queryKey: ["room", roomId],
+    queryFn: () => getRoom(roomId),
+    enabled: !!roomId,
+  });
+}
+
 
 export function useCreateRoom(buildingId: string) {
   const queryClient = useQueryClient();
@@ -71,5 +81,12 @@ export function useDeleteRoom(buildingId: string) {
         queryKey: ["buildings"],
       });
     },
+  });
+}
+
+export function useGlobalRooms() {
+  return useQuery({
+    queryKey: ["rooms", "global"],
+    queryFn: getGlobalRooms,
   });
 }

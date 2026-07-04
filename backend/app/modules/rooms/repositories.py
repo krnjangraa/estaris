@@ -95,6 +95,19 @@ class RoomRepository:
         rooms = []
 
         for room, occupied in result:
+            occupancy_rate = round((occupied / room.capacity) * 100, 1) if room.capacity > 0 else 0.0
+            monthly_rent_roll = 0.0
+            rent_due = 0.0
+            for t in room.tenants:
+                if t.status == "active":
+                    active_leases = [l for l in t.leases if l.status == "active"]
+                    if active_leases:
+                        monthly_rent_roll += float(active_leases[0].monthly_rent)
+                for lease in t.leases:
+                    for payment in lease.payments:
+                        if payment.status in ["pending", "overdue"]:
+                            rent_due += float(payment.amount_due) - float(payment.amount_paid)
+
             rooms.append(
                 {
                     "id": room.id,
@@ -105,6 +118,9 @@ class RoomRepository:
                     "base_rent": float(room.base_rent),
                     "occupied": occupied,
                     "available": room.capacity - occupied,
+                    "occupancy_rate": occupancy_rate,
+                    "monthly_rent_roll": monthly_rent_roll,
+                    "rent_due": rent_due,
                     "created_at": room.created_at,
                     "updated_at": room.updated_at,
                 }
@@ -140,6 +156,19 @@ class RoomRepository:
 
         rooms = []
         for room, building_name, occupied in result:
+            occupancy_rate = round((occupied / room.capacity) * 100, 1) if room.capacity > 0 else 0.0
+            monthly_rent_roll = 0.0
+            rent_due = 0.0
+            for t in room.tenants:
+                if t.status == "active":
+                    active_leases = [l for l in t.leases if l.status == "active"]
+                    if active_leases:
+                        monthly_rent_roll += float(active_leases[0].monthly_rent)
+                for lease in t.leases:
+                    for payment in lease.payments:
+                        if payment.status in ["pending", "overdue"]:
+                            rent_due += float(payment.amount_due) - float(payment.amount_paid)
+
             rooms.append(
                 {
                     "id": room.id,
@@ -151,6 +180,9 @@ class RoomRepository:
                     "base_rent": float(room.base_rent),
                     "occupied": occupied,
                     "available": room.capacity - occupied,
+                    "occupancy_rate": occupancy_rate,
+                    "monthly_rent_roll": monthly_rent_roll,
+                    "rent_due": rent_due,
                     "created_at": room.created_at,
                     "updated_at": room.updated_at,
                 }

@@ -37,7 +37,8 @@ export default function LeasesPage() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate(`/rooms/${tenant.room_id}/tenants`)}
+          onClick={() => navigate(`/rooms/${tenant.room_id}`)}
+
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>

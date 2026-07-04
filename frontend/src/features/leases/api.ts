@@ -4,6 +4,7 @@ import type {
   Lease,
   LeaseCreate,
   LeaseUpdate,
+  GlobalLease,
 } from "./types";
 
 export async function getLeases(
@@ -52,5 +53,10 @@ export async function getLease(
   const response = await api.get<Lease>(
     `/leases/${leaseId}`
   );
+  return response.data;
+}
+
+export async function getGlobalLeases() {
+  const response = await api.get<GlobalLease[]>("/leases");
   return response.data;
 }

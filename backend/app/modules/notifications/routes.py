@@ -47,6 +47,10 @@ def get_rent_due_notifications(
         result.append(
             RentDueNotification(
                 payment_id=payment.id,
+                lease_id=lease.id,
+                tenant_id=tenant.id,
+                room_id=room.id,
+                building_id=building.id,
                 tenant_name=tenant.name,
                 contact_number=tenant.contact_number,
                 room_number=room.room_number,
@@ -109,6 +113,10 @@ def mark_notified(
 
     return RentDueNotification(
         payment_id=payment.id,
+        lease_id=lease.id,
+        tenant_id=tenant.id,
+        room_id=room.id,
+        building_id=building.id,
         tenant_name=tenant.name,
         contact_number=tenant.contact_number,
         room_number=room.room_number,

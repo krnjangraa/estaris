@@ -5,6 +5,7 @@ from app.modules.auth.schemas import (
     AdminRead,
     LoginRequest,
     RefreshTokenRequest,
+    SignupRequest,
     TokenResponse,
 )
 from app.modules.auth.services import AuthService
@@ -13,6 +14,31 @@ router = APIRouter(
     prefix="/auth",
     tags=["Authentication"],
 )
+
+
+@router.post(
+    "/signup",
+    response_model=TokenResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def signup(
+    payload: SignupRequest,
+    session: SessionDep,
+):
+    result = AuthService.signup(
+        session=session,
+        name=payload.name,
+        email=payload.email,
+        password=payload.password,
+    )
+
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An account with this email already exists",
+        )
+
+    return result
 
 
 @router.post(
@@ -36,6 +62,7 @@ def login(
         )
 
     return token
+
 
 
 @router.post(

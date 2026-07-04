@@ -138,9 +138,35 @@ class Payment(TimestampedUUIDModel, table=True):
         return self.lease.tenant.name
 
     @property
+    def tenant_id(self) -> UUID:
+        return self.lease.tenant_id
+
+
+    @property
+    def contact_number(self) -> str:
+        return self.lease.tenant.contact_number
+
+    @property
     def room_number(self) -> str:
         return self.lease.tenant.room.room_number
 
     @property
     def building_name(self) -> str:
         return self.lease.tenant.room.building.name
+
+    @property
+    def room_id(self) -> UUID:
+        return self.lease.tenant.room_id
+
+    @property
+    def building_id(self) -> UUID:
+        return self.lease.tenant.room.building_id
+
+
+    @property
+    def due_date(self) -> date:
+        due_day = min(self.lease.payment_due_day, 28)
+        try:
+            return date(self.billing_year, self.billing_month, due_day)
+        except ValueError:
+            return date(self.billing_year, self.billing_month, 28)

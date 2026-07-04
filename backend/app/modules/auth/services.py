@@ -5,9 +5,11 @@ from app.core.security import (
     create_access_token,
     create_refresh_token,
     decode_token,
+    hash_password,
     verify_password,
 )
 
+from app.modules.auth.models import Admin, AdminRole
 from app.modules.auth.repositories import AdminRepository
 from app.modules.auth.schemas import (
     AdminRead,
@@ -16,6 +18,34 @@ from app.modules.auth.schemas import (
 
 
 class AuthService:
+
+    @staticmethod
+    def signup(
+        session: Session,
+        name: str,
+        email: str,
+        password: str,
+    ) -> TokenResponse | None:
+        """Create a new admin (owner) account. Returns None if email taken."""
+        existing = AdminRepository.get_by_email(session, email)
+        if existing is not None:
+            return None
+
+        admin = Admin(
+            name=name,
+            email=email,
+            password_hash=hash_password(password),
+            role=AdminRole.OWNER,
+        )
+        session.add(admin)
+        session.commit()
+        session.refresh(admin)
+
+        return TokenResponse(
+            access_token=create_access_token(admin.id),
+            refresh_token=create_refresh_token(admin.id),
+            admin=AdminRead.model_validate(admin),
+        )
 
     @staticmethod
     def login(

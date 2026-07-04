@@ -18,9 +18,11 @@ export interface Tenant {
   move_in_date: string;
 
   status: TenantStatus;
+  monthly_rent?: number;
 
   created_at: string;
   updated_at: string;
+
 }
 
 export interface TenantCreate {
@@ -49,4 +51,10 @@ export interface TenantUpdate {
   id_proof_number?: string;
 
   status?: TenantStatus;
+}
+
+export interface GlobalTenant extends Tenant {
+  room_number: string;
+  building_name: string;
+  building_id: string;
 }

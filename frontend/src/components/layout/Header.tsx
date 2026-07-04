@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Menu } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,11 @@ import { getCurrentAdmin } from "@/features/auth/auth";
 import NotificationsPanel from "@/features/notifications/NotificationsPanel";
 import { useRentDueNotifications } from "@/features/notifications/hooks";
 
-export default function Header() {
+interface Props {
+  onMenuClick: () => void;
+}
+
+export default function Header({ onMenuClick }: Props) {
   const admin = getCurrentAdmin();
   const [panelOpen, setPanelOpen] = useState(false);
 
@@ -18,8 +22,21 @@ export default function Header() {
 
   return (
     <>
-      <header className="h-16 border-b bg-white flex items-center justify-between px-6">
-        <h2 className="font-semibold text-xl">Dashboard</h2>
+      <header className="h-16 border-b border-slate-100 bg-white/80 backdrop-blur flex items-center justify-between px-4 md:px-8 sticky top-0 z-10">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={onMenuClick}
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5 text-slate-700" />
+          </Button>
+          <h2 className="font-bold text-xl text-slate-800">Dashboard</h2>
+        </div>
+
+
 
         <div className="flex items-center gap-3">
           {/* Notification Bell */}

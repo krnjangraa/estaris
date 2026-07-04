@@ -98,6 +98,8 @@ class LeaseRepository:
                 Tenant.name.label("tenant_name"),
                 Room.room_number,
                 Building.name.label("building_name"),
+                Room.id.label("room_id"),
+                Building.id.label("building_id"),
             )
             .join(Tenant, Tenant.id == Lease.tenant_id)
             .join(Room, Room.id == Tenant.room_id)
@@ -109,11 +111,13 @@ class LeaseRepository:
         result = session.exec(statement).all()
 
         leases = []
-        for lease, tenant_name, room_number, building_name in result:
+        for lease, tenant_name, room_number, building_name, room_id, building_id in result:
             l_dict = lease.model_dump()
             l_dict["tenant_name"] = tenant_name
             l_dict["room_number"] = room_number
             l_dict["building_name"] = building_name
+            l_dict["room_id"] = room_id
+            l_dict["building_id"] = building_id
             leases.append(l_dict)
 
         return leases

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -121,6 +121,16 @@ export default function LoginForm() {
               ? "Signing In..."
               : "Sign In"}
           </Button>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-primary font-medium hover:underline"
+            >
+              Create one
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>

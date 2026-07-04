@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { DoorOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -74,6 +74,9 @@ export default function BuildingTable({
             <TableHead>Name</TableHead>
             <TableHead>Address</TableHead>
             <TableHead>Rooms</TableHead>
+            <TableHead className="text-right">Occupancy</TableHead>
+            <TableHead className="text-right">Rent Roll</TableHead>
+            <TableHead className="text-right">Rent Due</TableHead>
             <TableHead className="text-right">
               Actions
             </TableHead>
@@ -82,7 +85,11 @@ export default function BuildingTable({
 
         <TableBody>
           {buildings.map((building) => (
-            <TableRow key={building.id}>
+            <TableRow
+              key={building.id}
+              className="cursor-pointer hover:bg-slate-50"
+              onClick={() => navigate(`/buildings/${building.id}/rooms`)}
+            >
               <TableCell className="font-medium">
                 {building.name}
               </TableCell>
@@ -95,7 +102,25 @@ export default function BuildingTable({
                 {building.total_rooms}
               </TableCell>
 
-              <TableCell className="text-right space-x-2">
+              <TableCell className="text-right font-medium">
+                {building.occupancy_rate}%
+              </TableCell>
+
+              <TableCell className="text-right font-medium">
+                ₹{Number(building.monthly_rent_roll).toLocaleString("en-IN")}
+              </TableCell>
+
+              <TableCell className="text-right">
+                <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full border ${
+                  building.rent_due > 0
+                    ? "bg-red-100 text-red-800 border-red-200"
+                    : "bg-green-100 text-green-800 border-green-200"
+                }`}>
+                  ₹{Number(building.rent_due).toLocaleString("en-IN")}
+                </span>
+              </TableCell>
+
+              <TableCell className="text-right space-x-2" onClick={(e) => e.stopPropagation()}>
                 <Button
                   size="icon"
                   variant="outline"
@@ -108,16 +133,6 @@ export default function BuildingTable({
                 </Button>
                 <Button
                   size="icon"
-                  variant="secondary"
-                  title="View Rooms"
-                  onClick={() =>
-                    navigate(`/buildings/${building.id}/rooms`)
-                  }
-                >
-                  <DoorOpen size={16} />
-                </Button>
-                <Button
-                  size="icon"
                   variant="destructive"
                   title="Delete Building"
                   onClick={() =>
@@ -127,13 +142,14 @@ export default function BuildingTable({
                   <Trash2 size={16} />
                 </Button>
               </TableCell>
+
             </TableRow>
           ))}
 
           {buildings.length === 0 && (
             <TableRow>
               <TableCell
-                colSpan={4}
+                colSpan={7}
                 className="text-center py-10"
               >
                 No buildings found.

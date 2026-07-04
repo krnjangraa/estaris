@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
+
   Download,
   Building2,
   CreditCard,
@@ -419,13 +421,23 @@ export default function ReportsPage() {
                       duesReport.items.map((item) => (
                         <TableRow key={item.payment_id}>
                           <TableCell>
-                            <strong className="block text-slate-800 text-sm font-semibold">{item.tenant_name}</strong>
+                            <Link to={`/tenants/${item.tenant_id}`} className="block text-primary hover:underline text-sm font-semibold">
+                              {item.tenant_name}
+                            </Link>
                             <span className="text-xs text-slate-500 font-mono">{item.tenant_phone}</span>
                           </TableCell>
                           <TableCell>
-                            <span className="block text-xs font-medium text-slate-600">{item.building_name}</span>
-                            <span className="text-[11px] text-slate-500 font-mono">Room: {item.room_number}</span>
+                            <Link to={`/buildings/${item.building_id}/rooms`} className="block text-xs font-semibold text-primary hover:underline">
+                              {item.building_name}
+                            </Link>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              Room:{" "}
+                              <Link to={`/rooms/${item.room_id}`} className="text-primary hover:underline font-semibold">
+                                {item.room_number}
+                              </Link>
+                            </span>
                           </TableCell>
+
                           <TableCell className="font-medium text-slate-800 text-xs">
                             {MONTH_NAMES[item.month]} {item.year}
                           </TableCell>

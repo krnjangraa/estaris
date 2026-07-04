@@ -4,6 +4,7 @@ import type {
   Tenant,
   TenantCreate,
   TenantUpdate,
+  GlobalTenant,
 } from "./types";
 
 export async function getTenants(
@@ -43,15 +44,21 @@ export async function updateTenant(
 export async function getTenant(
   tenantId: string
 ) {
-  const response = await api.get<Tenant>(
+  const response = await api.get<GlobalTenant>(
     `/tenants/${tenantId}`
   );
 
   return response.data;
 }
 
+
 export async function deleteTenant(
   tenantId: string
 ) {
   await api.delete(`/tenants/${tenantId}`);
+}
+
+export async function getGlobalTenants() {
+  const response = await api.get<GlobalTenant[]>("/tenants");
+  return response.data;
 }

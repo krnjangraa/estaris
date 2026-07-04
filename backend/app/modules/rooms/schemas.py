@@ -60,9 +60,14 @@ class RoomRead(BaseModel):
 
     occupied: int
     available: int
+    occupancy_rate: float
+    monthly_rent_roll: float
+    rent_due: float
 
     created_at: datetime
     updated_at: datetime
+
+
 
     model_config = ConfigDict(
         from_attributes=True,

@@ -1,6 +1,11 @@
 export interface RentDueNotification {
   payment_id: string;
+  lease_id: string;
+  tenant_id: string;
+  room_id: string;
+  building_id: string;
   tenant_name: string;
+
   contact_number: string;
   room_number: string;
   building_name: string;

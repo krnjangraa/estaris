@@ -68,3 +68,5 @@ class GlobalLeaseRead(LeaseRead):
     tenant_name: str
     room_number: str
     building_name: str
+    room_id: UUID
+    building_id: UUID

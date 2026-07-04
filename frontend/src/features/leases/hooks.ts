@@ -10,6 +10,7 @@ import {
   getLease,
   getLeases,
   updateLease,
+  getGlobalLeases,
 } from "./api";
 
 export function useLeases(tenantId: string) {
@@ -89,3 +90,11 @@ export function useLease(leaseId: string) {
     enabled: !!leaseId,
   });
 }
+
+export function useGlobalLeases() {
+  return useQuery({
+    queryKey: ["leases", "global"],
+    queryFn: getGlobalLeases,
+  });
+}
+

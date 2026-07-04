@@ -86,3 +86,11 @@ class Lease(TimestampedUUIDModel, table=True):
     payments: List["Payment"] = Relationship(
         back_populates="lease",
     )
+
+    @property
+    def room_id(self) -> UUID:
+        return self.tenant.room_id
+
+    @property
+    def building_id(self) -> UUID:
+        return self.tenant.room.building_id

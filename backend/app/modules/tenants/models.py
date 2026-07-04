@@ -102,3 +102,22 @@ class Tenant(TimestampedUUIDModel, table=True):
     leases: List["Lease"] = Relationship(
         back_populates="tenant",
     )
+
+    @property
+    def monthly_rent(self) -> float | None:
+        active_leases = [l for l in self.leases if l.status == "active"]
+        if active_leases:
+            return float(active_leases[0].monthly_rent)
+        return None
+
+    @property
+    def room_number(self) -> str:
+        return self.room.room_number
+
+    @property
+    def building_name(self) -> str:
+        return self.room.building.name
+
+    @property
+    def building_id(self) -> UUID:
+        return self.room.building_id

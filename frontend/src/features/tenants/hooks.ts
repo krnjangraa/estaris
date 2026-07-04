@@ -10,6 +10,7 @@ import {
   getTenant,
   getTenants,
   updateTenant,
+  getGlobalTenants,
 } from "./api";
 
 export function useTenants(roomId: string) {
@@ -89,5 +90,12 @@ export function useDeleteTenant(
         queryKey: ["rooms"],
       });
     },
+  });
+}
+
+export function useGlobalTenants() {
+  return useQuery({
+    queryKey: ["tenants", "global"],
+    queryFn: getGlobalTenants,
   });
 }

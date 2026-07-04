@@ -96,6 +96,7 @@ class TenantRepository:
                 Tenant,
                 Room.room_number,
                 Building.name.label("building_name"),
+                Building.id.label("building_id"),
             )
             .join(Room, Room.id == Tenant.room_id)
             .join(Building, Building.id == Room.building_id)
@@ -106,10 +107,11 @@ class TenantRepository:
         result = session.exec(statement).all()
 
         tenants = []
-        for tenant, room_number, building_name in result:
+        for tenant, room_number, building_name, building_id in result:
             t_dict = tenant.model_dump()
             t_dict["room_number"] = room_number
             t_dict["building_name"] = building_name
+            t_dict["building_id"] = building_id
             tenants.append(t_dict)
 
         return tenants

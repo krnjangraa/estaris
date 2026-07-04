@@ -178,14 +178,17 @@ class ReportService:
             room = tenant.room
             building = room.building if room else None
 
-            amount_pending = max(0.0, p.amount_due - p.amount_paid)
+            amount_pending = max(0.0, float(p.amount_due) - float(p.amount_paid))
             total_pending_amount += amount_pending
+
 
             items.append(
                 PendingDueReportItem(
                     payment_id=p.id,
                     lease_id=p.lease_id,
                     tenant_id=tenant.id,
+                    room_id=room.id,
+                    building_id=building.id,
                     tenant_name=tenant.name,
                     tenant_phone=tenant.contact_number,
                     emergency_contact=tenant.emergency_contact_name,
@@ -200,6 +203,7 @@ class ReportService:
                     status=p.status,
                 )
             )
+
 
         return PendingDuesReport(
             total_pending_accounts=len(items),
@@ -365,7 +369,8 @@ class ReportService:
             room = tenant.room if tenant else None
             building = room.building if room else None
 
-            amount_pending = max(0.0, p.amount_due - p.amount_paid)
+            amount_pending = max(0.0, float(p.amount_due) - float(p.amount_paid))
+
 
             writer.writerow([
                 tenant.name if tenant else "N/A",

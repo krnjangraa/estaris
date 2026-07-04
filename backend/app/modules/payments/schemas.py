@@ -53,17 +53,25 @@ class PaymentRead(BaseModel):
     amount_paid: float
 
     payment_date: date
+    due_date: date
 
     payment_method: PaymentMethod
+
 
     status: PaymentStatus
 
     transaction_reference: str | None
     receipt_number: str
     tenant_name: str
+    tenant_id: UUID
+    contact_number: str
+
     room_number: str
     building_name: str
+    room_id: UUID
+    building_id: UUID
     remarks: str | None
+
 
     created_at: datetime
     updated_at: datetime

@@ -72,3 +72,29 @@ class Room(TimestampedUUIDModel, table=True):
     @property
     def available(self) -> int:
         return self.capacity - self.occupied
+
+    @property
+    def occupancy_rate(self) -> float:
+        if self.capacity == 0:
+            return 0.0
+        return round((self.occupied / self.capacity) * 100, 1)
+
+    @property
+    def monthly_rent_roll(self) -> float:
+        total = 0.0
+        for t in self.tenants:
+            if t.status == "active":
+                active_leases = [l for l in t.leases if l.status == "active"]
+                if active_leases:
+                    total += float(active_leases[0].monthly_rent)
+        return total
+
+    @property
+    def rent_due(self) -> float:
+        total_due = 0.0
+        for t in self.tenants:
+            for lease in t.leases:
+                for payment in lease.payments:
+                    if payment.status in ["pending", "overdue"]:
+                        total_due += float(payment.amount_due) - float(payment.amount_paid)
+        return total_due

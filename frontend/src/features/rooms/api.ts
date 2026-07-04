@@ -43,6 +43,12 @@ export async function deleteRoom(roomId: string) {
   await api.delete(`/rooms/${roomId}`);
 }
 
+export async function getRoom(roomId: string) {
+  const response = await api.get<Room>(`/rooms/${roomId}`);
+  return response.data;
+}
+
+
 export async function getGlobalRooms() {
   const response = await api.get<GlobalRoom[]>("/rooms");
   return response.data;

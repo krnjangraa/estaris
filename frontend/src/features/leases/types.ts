@@ -28,3 +28,12 @@ export interface LeaseUpdate {
   payment_due_day?: number;
   status?: LeaseStatus;
 }
+
+export interface GlobalLease extends Lease {
+  tenant_name: string;
+  room_number: string;
+  building_name: string;
+  room_id: string;
+  building_id: string;
+}
+

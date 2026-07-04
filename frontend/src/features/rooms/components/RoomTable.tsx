@@ -85,18 +85,13 @@ export default function RoomTable({
           <TableRow>
             <TableHead>Room</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead className="text-center">
-              Capacity
-            </TableHead>
-            <TableHead className="text-center">
-              Occupied
-            </TableHead>
-            <TableHead className="text-center">
-              Available
-            </TableHead>
-            <TableHead className="text-right">
-              Rent
-            </TableHead>
+            <TableHead className="text-center">Capacity</TableHead>
+            <TableHead className="text-center">Occupied</TableHead>
+            <TableHead className="text-center">Available</TableHead>
+            <TableHead className="text-right">Occupancy %</TableHead>
+            <TableHead className="text-right">Rent Per Bed</TableHead>
+            <TableHead className="text-right">Current Rent</TableHead>
+            <TableHead className="text-right">Rent Due</TableHead>
             <TableHead className="text-right">
               Actions
             </TableHead>
@@ -105,7 +100,11 @@ export default function RoomTable({
 
         <TableBody>
           {rooms.map((room) => (
-            <TableRow key={room.id}>
+            <TableRow
+              key={room.id}
+              className="cursor-pointer hover:bg-slate-50"
+              onClick={() => navigate(`/rooms/${room.id}`)}
+            >
               <TableCell className="font-medium">
                 {room.room_number}
               </TableCell>
@@ -132,14 +131,29 @@ export default function RoomTable({
                 {room.available}
               </TableCell>
 
-              <TableCell className="text-right">
-                ₹
-                {Number(room.base_rent).toLocaleString(
-                  "en-IN"
-                )}
+              <TableCell className="text-right font-medium">
+                {room.occupancy_rate}%
               </TableCell>
 
-              <TableCell className="space-x-2 text-right">
+              <TableCell className="text-right">
+                ₹{Number(room.base_rent).toLocaleString("en-IN")}
+              </TableCell>
+
+              <TableCell className="text-right font-medium">
+                ₹{Number(room.monthly_rent_roll).toLocaleString("en-IN")}
+              </TableCell>
+
+              <TableCell className="text-right">
+                <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full border ${
+                  room.rent_due > 0
+                    ? "bg-red-100 text-red-800 border-red-200"
+                    : "bg-green-100 text-green-800 border-green-200"
+                }`}>
+                  ₹{Number(room.rent_due).toLocaleString("en-IN")}
+                </span>
+              </TableCell>
+
+              <TableCell className="space-x-2 text-right" onClick={(e) => e.stopPropagation()}>
                 <Button
                   size="icon"
                   variant="outline"
@@ -157,9 +171,10 @@ export default function RoomTable({
                   title="View Tenants"
                   onClick={() =>
                     navigate(
-                      `/rooms/${room.id}/tenants`
+                      `/rooms/${room.id}`
                     )
                   }
+
                 >
                   <Users size={16} />
                 </Button>
@@ -176,12 +191,13 @@ export default function RoomTable({
                 </Button>
               </TableCell>
             </TableRow>
+
           ))}
 
           {rooms.length === 0 && (
             <TableRow>
               <TableCell
-                colSpan={7}
+                colSpan={10}
                 className="py-10 text-center text-muted-foreground"
               >
                 No rooms found.

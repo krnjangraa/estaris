@@ -44,6 +44,9 @@ export function useCreatePayment(leaseId: string) {
       queryClient.invalidateQueries({
         queryKey: ["payments", "global"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "rent-due"],
+      });
     },
   });
 }
@@ -65,6 +68,9 @@ export function useUpdatePayment(leaseId: string) {
       queryClient.invalidateQueries({
         queryKey: ["lease", leaseId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "rent-due"],
+      });
     },
   });
 }
@@ -82,6 +88,10 @@ export function useDeletePayment(leaseId: string) {
       queryClient.invalidateQueries({
         queryKey: ["payments", "global"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "rent-due"],
+      });
     },
   });
 }
+

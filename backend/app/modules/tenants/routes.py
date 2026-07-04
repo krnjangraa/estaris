@@ -76,7 +76,7 @@ def get_tenants(
 
 @router.get(
     "/tenants/{tenant_id}",
-    response_model=TenantRead,
+    response_model=GlobalTenantRead,
 )
 def get_tenant(
     tenant_id: UUID,
