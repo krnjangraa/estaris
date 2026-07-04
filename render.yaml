@@ -22,5 +22,6 @@ services:
         value: https://estaris-backend.onrender.com/api/v1
     routes:
       - type: rewrite
-        src: /*
-        dest: /index.html
+        source: /*
+        destination: /index.html
+
