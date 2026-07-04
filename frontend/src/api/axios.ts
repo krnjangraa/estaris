@@ -15,8 +15,17 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
+  // If the URL has a leading slash and the baseURL is an absolute URL containing a subpath,
+  // Axios will drop the subpath. Join them correctly to preserve /api/v1.
+  if (config.url && config.url.startsWith("/") && config.baseURL && config.baseURL.startsWith("http")) {
+    const cleanBaseURL = config.baseURL.endsWith("/") ? config.baseURL.slice(0, -1) : config.baseURL;
+    config.url = cleanBaseURL + config.url;
+    config.baseURL = ""; // Clear baseURL so Axios doesn't prepend it again
+  }
+
   return config;
 });
+
 
 api.interceptors.response.use(
   (response) => response,
