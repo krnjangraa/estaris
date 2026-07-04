@@ -1,0 +1,26 @@
+services:
+  # 1. Backend Web Service (FastAPI)
+  - type: web
+    name: estaris-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+
+  # 2. Frontend Static Site (Vite / React)
+  - type: web
+    name: estaris-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://estaris-backend.onrender.com/api/v1
+    routes:
+      - type: rewrite
+        src: /*
+        dest: /index.html
