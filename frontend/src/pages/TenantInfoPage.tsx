@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ArrowLeft, MessageCircle, AlertCircle, CheckCircle2, ShieldAlert } from "lucide-react";
+import { ArrowLeft, MessageCircle, CheckCircle2, ShieldAlert } from "lucide-react";
+
 import { useParams, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";

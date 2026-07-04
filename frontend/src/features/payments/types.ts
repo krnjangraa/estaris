@@ -9,20 +9,21 @@ export interface Payment {
   amount_due: number;
   amount_paid: number;
   payment_date: string;
-  due_date: string;
+  due_date?: string;
   payment_method: PaymentMethod;
 
   status: PaymentStatus;
   transaction_reference?: string;
   receipt_number: string;
   tenant_name: string;
-  tenant_id: string;
+  tenant_id?: string;
   contact_number: string;
 
   room_number: string;
   building_name: string;
-  room_id: string;
-  building_id: string;
+  room_id?: string;
+  building_id?: string;
+
   remarks?: string;
   created_at: string;
   updated_at: string;

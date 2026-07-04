@@ -42,10 +42,13 @@ export interface PendingDueReportItem {
   payment_id: string;
   lease_id: string;
   tenant_id: string;
+  room_id: string;
+  building_id: string;
   tenant_name: string;
   tenant_phone: string;
   emergency_contact: string;
   emergency_phone: string;
+
   building_name: string;
   room_number: string;
   month: number;
